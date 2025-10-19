@@ -1,3 +1,33 @@
+# ============================================
+# Notion2Tube Project - API Credentials & Secrets
+# ============================================
+
+# Google/YouTube API credentials
+client_secrets.json
+token.json
+*.json
+
+# Notion API keys (already covered by .env above, but being explicit)
+.env.local
+
+# Video files (if storing locally for testing)
+# videos/
+# *.mp4
+# *.mov
+
+# Thumbnails (if storing locally)
+# thumbnails/
+# *.jpg
+# *.png
+
+# Logs directory
+logs/*.log
+!logs/.gitkeep
+
+# VS Code workspace settings (project-specific)
+.vscode/
+*.code-workspace
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
