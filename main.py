@@ -19,6 +19,13 @@ def main():
         # Uploader.py 
         # update_page_with_url
         #set_as_uploaded
+    pageIds = notion.get_ready_pages_ids()
+    index = 0
+
+    for i in pageIds:
+        notion.set_as_uploaded(pageIds[index])
+        notion.update_page_with_url(pageIds[index], "test" + str(index) + ".url")
+        index = index + 1 
 
 
 if __name__ == "__main__":

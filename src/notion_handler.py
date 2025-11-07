@@ -11,19 +11,33 @@ class NotionHandler:
         self.client = Client(auth=notionToken)
 
     # Retrieves complete database
-    def get_database(self, database_id):
-        response = self.client.databases.retrieve(database_id= database_id)
+    def get_database(self):
+        response = self.client.databases.retrieve(database_id= self.database_id)
         return response
     
-    # Retrieves Ready to Upload Rows
-    # EDIT to only get page ids and store them as an array
-    def get_ready_to_upload(self, database_id):
-        response = self.client.databases.query(database_id= database_id, filter={"property": "Status", "status": {"equals": "Ready to Upload"}})
-        return response
-    
-    # Method that retrieves needed information for each video
-    
+    # Retrieves Ready to Upload Pages 
+    def get_ready_pages_ids(self):
+        response = self.client.databases.query(database_id= self.database_id, filter={"property": "Status", "status": {"equals": "Ready to Upload"}})
+        pages = response["results"]
+        page_ids = []
+        for page in pages:
+            page_id = page["id"]
+            page_ids.append(page_id)            
+        return page_ids
 
+    # Method that retrieves needed information for each video  
+    def get_ready_pages_metadata(self):
+        response = self.client.databases.query(database_id= self.database_id, filter={"property": "Status", "status": {"equals": "Ready to Upload"}})
+        pages = response["results"]
+        for page in pages:
+            title   = page["properties"]["Short Title"]["title"][0]["plain_text"] 
+            description = page["properties"]["Short Description"]["rich_text"][0]["plain_text"]
+            game = page["properties"]["Game"]["status"]["name"]
+            filename = page["properties"]["Filename"]["rich_text"][0]["plain_text"]
+            upload_date = page["properties"]["Upload Date"]["date"]["start"]
+            recording_date = page["properties"]["Recording Date"]["date"]["start"]
+            print(title + " - " + description + " - " + game + " - " + filename + " - " + upload_date + " - " + recording_date)     
+    
     # Updates pages with its url once uploaded
     def update_page_with_url(self, page_id, youtube_url):
         response = self.client.pages.update(page_id= page_id, properties= {"Youtube URL": {"url": youtube_url}})
